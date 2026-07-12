@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Higgsfield.ai Investment Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+        
+        /* Language Toggle Rules */
+        [data-lang="en"] .lang-zh { display: none !important; }
+        [data-lang="zh"] .lang-en { display: none !important; }
+    </style>
+</head>
+<body class="text-zinc-100 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-amber-500 rounded-full animate-pulse"></div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                    Higgsfield.ai 
+                    <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono lang-en">TECHNICAL DUE DILIGENCE & ARBITRAGE SIMULATOR</span>
+                    <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono lang-zh">技术尽职调查与套利经济学仿真器</span>
+                </h1>
+                <p class="text-xs text-zinc-400 lang-en">An Objective Underwriting Framework for Summit House Ventures (2026 Update)</p>
+                <p class="text-xs text-zinc-400 lang-zh">Summit House Ventures 独立客观投资评估决策看板 (2026最新数据版)</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Language Switcher Button -->
+            <div class="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-1 mr-2">
+                <button onclick="setLanguage('en')" id="btn-lang-en" class="text-xs px-2.5 py-1 rounded font-medium transition-all bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono">EN</button>
+                <button onclick="setLanguage('zh')" id="btn-lang-zh" class="text-xs px-2.5 py-1 rounded font-medium transition-all text-zinc-400 hover:text-white font-mono">中</button>
+            </div>
+            <div class="h-4 w-px bg-zinc-800"></div>
+            <span class="text-xs text-zinc-500 font-mono">CONFIDENTIAL // INTERNAL USE ONLY</span>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Sidebar: Framework Selector & Bulletproof Analysis -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            <!-- Navigation Tabs -->
+            <div class="bg-zinc-900 p-1.5 rounded-xl border border-zinc-800 flex flex-wrap gap-1">
+                <button onclick="switchTab('good')" id="tab-good" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 bg-zinc-800 text-white shadow-sm border border-zinc-700">
+                    <span class="lang-en">👍 Bull Case (Why Invest)</span>
+                    <span class="lang-zh">👍 投资理由 (Bull Case)</span>
+                </button>
+                <button onclick="switchTab('bad')" id="tab-bad" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">⚠️ Bear Case (Why Pass)</span>
+                    <span class="lang-zh">⚠️ 放弃理由 (Bear Case)</span>
+                </button>
+                <button onclick="switchTab('business')" id="tab-business" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">💰 Arbitrage Model</span>
+                    <span class="lang-zh">💰 积分套利账本</span>
+                </button>
+                <button onclick="switchTab('tech')" id="tab-tech" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">🧬 Core Technology</span>
+                    <span class="lang-zh">🧬 底层技术壁垒</span>
+                </button>
+                <button onclick="switchTab('trends')" id="tab-trends" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">🚀 GTM Reality Check</span>
+                    <span class="lang-zh">🚀 商业落地核实</span>
+                </button>
+            </div>
+
+            <!-- Tab Content Display Area -->
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-6 flex-1 min-h-[480px]">
+                
+                <!-- TAB 1: GOOD PART (BULL CASE) -->
+                <div id="content-good" class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+                            <span>👍</span> 
+                            <span class="lang-en">The Bull Case: Why We Might Allocate</span>
+                            <span class="lang-zh">投资理由：看中其在赛道中的独特防御身位</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 1 OF 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                <span class="lang-en">De-risking the "Foundation Model War"</span>
+                                <span class="lang-zh">完美对冲“底层算法军备竞赛”</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                By functioning as a multi-model aggregator (integrating <strong>Sora 2, Kling 3.0, Seedance 2.0, Veo 3.1</strong>), Higgsfield is immune to the fatal risk of algorithm displacement. If a competitor launches a superior video model, Higgsfield simply plugs it into their ecosystem, turning existential threat into a catalog update.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                通过多模型聚合定位（无缝接入 <strong>Sora 2、快手可灵 3.0、字节跳动 Seedance 2.0、谷歌 Veo 3.1</strong>），它彻底摆脱了底层视频大模型“技术淘汰”的生死劫。不管未来哪家大厂胜出，它只需通过 API 接入即可，将“被颠覆风险”转化为“平台模型库扩充”。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                <span class="lang-en">The Proprietary Directing Logic Layer</span>
+                                <span class="lang-zh">自研高壁垒的“AI导演推理层”</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Raw video output is commoditizing. Higgsfield's value add is their orchestration layer that manages character consistency, multi-angle camera mapping (panning, zoom, tilting), and narrative flow, turning chaotic AI renders into professional, controllable assets.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                单纯的文生视频终将同质化。Higgsfield 真正高明的地方在于其自研的“编排逻辑层”：它用来解决角色一致性（Character Consistency）和多镜头运动轨迹控制（Pan/Zoom/Tilt）。它提供的是“控制力”，而非单纯的“画质”。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                <span class="lang-en">Unified Billing Sandboxing</span>
+                                <span class="lang-zh">解决多工具订阅痛点的“统一沙盒”</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Professional creators hate paying for 10 separate subscription bills (Midjourney, ElevenLabs, Runway, Sora). Higgsfield wraps all premier third-party models under one single platform credit system, capturing massive market share by simplifying the creative tool stack.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                创作者极度厌烦同时维护 10 种不同的产品账单。Higgsfield 通过统一的“信用分/积分”沙盒，将市面上所有顶级的第三方模型打包成单一订阅服务，通过降低用户的订阅摩擦，迅速吃下长尾市场。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
+                                <span class="lang-en">Explosive, Cash-Flow Positive Scale</span>
+                                <span class="lang-zh">爆发性增长：横扫 5 亿美元 ARR</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Leveraging their viral app, Diffuse, Higgsfield has captured 24M+ active users. As of <strong>mid-2026</strong>, their annual recurring revenue (ARR) has crossed <strong>$500M with positive cash flow</strong>, currently negotiating a new financing round at a $5B valuation.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                借力旗下爆款应用 Diffuse 的病毒性裂变，其累计用户突围 2400 万。截至 <strong>2026 年年中</strong>，其 ARR 狂飙突破 <strong>5 亿美元且罕见实现正现金流</strong>，目前正以 50 亿美元估值商谈下一轮融资。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: BEAR CASE (WHY PASS / THE SKEPTICISM) -->
+                <div id="content-bad" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-red-400 flex items-center gap-2">
+                            <span>⚠️</span> 
+                            <span class="lang-en">The Bear Case: The Brutal Skepticisms</span>
+                            <span class="lang-zh">放弃理由：剥离泡沫后的六大致命软肋</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 2 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">01</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">
+                                    <span class="lang-en">The "Hot but Short-Lived App" Trap (Lensa AI Trap)</span>
+                                    <span class="lang-zh">“昙花一现”的爆款应用陷阱 (Lensa 宿命)</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-en">
+                                    Like Lensa AI or various avatar apps, Higgsfield's current viral user base is heavily driven by novel consumer trends (e.g., placing one's face into pre-made video templates). Once the hype fades, consumer **churn rates** (用户流失率) could skyrocket, failing to transform into an enterprise-level SaaS.
+                                </p>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-zh">
+                                    正如 Lensa AI 等曾经爆火的头像/换脸工具，Higgsfield 目前的大量用户是被“把自己的脸塞进模版”这种消费级趣味驱使的。一旦新鲜感退去，其用户**月流失率（Churn Rate）**可能会出现灾难性反弹，无法沉淀为真正高粘度的企业级软件。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">02</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">
+                                    <span class="lang-en">Severe Upstream API Dependence & Pricing Vulnerability</span>
+                                    <span class="lang-zh">对上游大厂 API 的高度寄生性</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-en">
+                                    Because Higgsfield relies on routing premium requests to Sora 2, Kling 3.0, and Seedance 2.0, they are essentially **pricing-takers**. If OpenAI or ByteDance raises their wholesale API pricing, or clamps down on high-concurrency routing, Higgsfield’s unit economics collapses instantly.
+                                </p>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-zh">
+                                    由于他们核心的高端生成高度依赖向 Sora 2 或可灵 3.0 等上游 API 分流，它在定价权上是极度受制于人的（Pricing-Taker）。一旦 OpenAI 或字节跳动单方面提高 API 批发价格，或者限制高并发调用，其单位经济学（Unit Economics）将瞬间崩溃。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">03</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">
+                                    <span class="lang-en">Disintermediation Threat from Platform Native Bundles</span>
+                                    <span class="lang-zh">平台级原生套件的去中介化威胁 (如剪映内置)</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-en">
+                                    What prevents ByteDance from natively building a seamless, free controllable-motion tool directly inside **CapCut (剪映)**, or Adobe embedding Sora 2 directly into Premiere with zero extra cost? If platform giants bundle these features, a middleman aggregator loses all purpose.
+                                </p>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-zh">
+                                    一旦字节跳动直接将一模一样的“一致性动作控制”免费内置进剪映（CapCut），或者 Adobe 直接把 Sora 2 无缝集成在 Premiere 中且免除额外收费，创作者通过 Higgsfield 作为中间商进行二次调用的必要性将大打折扣。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: BUSINESS MODEL (ARBITRAGE) -->
+                <div id="content-business" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-sky-400 flex items-center gap-2">
+                            <span>💰</span> 
+                            <span class="lang-en">2026 Core Pricing: Credit Arbitrage Tiers</span>
+                            <span class="lang-zh">2026核心商业化：高毛利的“积分差价套利”</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 3 OF 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-sky-400 font-mono tracking-wider mb-1 uppercase">
+                                    <span class="lang-en">Basic Plan</span>
+                                    <span class="lang-zh">基础版订阅</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white mb-2">
+                                    <span class="lang-en">Entry-Level Access</span>
+                                    <span class="lang-zh">轻度生成入口</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-en">
+                                    Includes 70 credits/mo. Access is restricted to lightweight entry-level models (e.g., proprietary Soul 2.0). Protects platform from cash-burn by heavy models.
+                                </p>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-zh">
+                                    每月提供 70 积分。仅允许调用自研的轻量 Soul 2.0 基础模型。完美阻止白嫖用户用第三方昂贵 API 烧穿平台算力。
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$9<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-purple-400 font-mono tracking-wider mb-1 uppercase">
+                                    <span class="lang-en">Pro Plan (Most Popular)</span>
+                                    <span class="lang-zh">专业版（最受欢迎）</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white mb-2">
+                                    <span class="lang-en">Unlimited Arbitrage Tier</span>
+                                    <span class="lang-zh">中产创作者主力池</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-en">
+                                    Includes 600 credits/mo. Unlocks unlimited generations on high-margin in-house models, but strictly regulates fast renders on premium partner models like <strong>Kling 3.0</strong>.
+                                </p>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-zh">
+                                    每月提供 600 积分。对高利润自研模型开放“无限生成”，但对 **Kling 3.0**、**Seedance 2.0** 等第三方模型的调用进行严格限流和高扣分。
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$17.4<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-emerald-400 font-mono tracking-wider mb-1 uppercase">
+                                    <span class="lang-en">Ultimate & Enterprise</span>
+                                    <span class="lang-zh">终极版/企业多席位</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white mb-2">
+                                    <span class="lang-en">4K Professional Studio</span>
+                                    <span class="lang-zh">专业工作流/高客单价</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-en">
+                                    Includes 1,800+ credits/mo. Unlocks native 4K upscaling and priority rendering queue on ultra-expensive models like <strong>Sora 2</strong> and <strong>Veo 3.1</strong>.
+                                </p>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-zh">
+                                    每月提供 1,800+ 积分。完全解锁 4K 高画质和最高优先度的 **Sora 2** 及 **Veo 3.1** 等重型 API 调度管道。
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$24.5 - $119<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: CORE TECH -->
+                <div id="content-tech" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-yellow-500 flex items-center gap-2">
+                            <span>🧬</span> 
+                            <span class="lang-en">Core Technology: Aggregator vs Base Player</span>
+                            <span class="lang-zh">核心技术评估：聚合编排 vs 自研军备竞赛</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 4 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-zinc-900/20 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-zinc-200 mb-2">
+                                <span class="lang-en">The Model Context Protocol (MCP) Integration</span>
+                                <span class="lang-zh">首个深度集成 2026 全新 MCP 协议的视频聚合网关</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Rather than having developers hardcode API pipelines for 10 different models, Higgsfield exposes its aggregated suite via the standard **Model Context Protocol (MCP)**. Any external AI Agent (e.g., Claude Code, Hermes) can instantly call and orchestrate video models with zero friction, positioning Higgsfield as the infrastructure layer of generative video.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                开发者不需要为 10 种视频大模型单独写 API 管道。Higgsfield 通过 **Model Context Protocol (MCP, 模型上下文协议)** 统一封装。外部任何 AI 智能体（如 Claude Code 或 Hermes）只需导入一个协议链接，即可无摩擦调用全网视频大模型，成功卡位生成式视频的“底层路由基础设施”。
+                            </p>
+                        </div>
+                        <table class="w-full text-xs text-left text-zinc-300">
+                            <thead class="bg-zinc-900 text-zinc-500 font-mono">
+                                <tr>
+                                    <th class="p-3">
+                                        <span class="lang-en">Model Class</span>
+                                        <span class="lang-zh">模型类型</span>
+                                    </th>
+                                    <th class="p-3">
+                                        <span class="lang-en">Source Provider</span>
+                                        <span class="lang-zh">提供商</span>
+                                    </th>
+                                    <th class="p-3">
+                                        <span class="lang-en">Role in Ecosystem</span>
+                                        <span class="lang-zh">生态角色定位</span>
+                                    </th>
+                                    <th class="p-3">
+                                        <span class="lang-en">Arbitrage Weight</span>
+                                        <span class="lang-zh">套利消耗权重</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800">
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Sora 2 / Veo 3.1</td>
+                                    <td class="p-3 text-red-400">OpenAI / Google</td>
+                                    <td class="p-3 lang-en">High fidelity backgrounds, slow rendering</td>
+                                    <td class="p-3 lang-zh">超高清电影级慢幅渲染背景生成</td>
+                                    <td class="p-3 text-red-400 font-mono font-bold">80+ Credits</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Seedance 2.0 / Kling 3.0</td>
+                                    <td class="p-3 text-amber-400">ByteDance / Kuaishou</td>
+                                    <td class="p-3 lang-en">Continuous multi-shot narration, fast motion</td>
+                                    <td class="p-3 lang-zh">多镜头叙事、高帧率动作捕捉与传递</td>
+                                    <td class="p-3 text-amber-400 font-mono">15 - 30 Credits</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Soul 2.0 / DOP</td>
+                                    <td class="p-3 text-emerald-400">Proprietary (Higgsfield)</td>
+                                    <td class="p-3 lang-en">Character face-locking (Soul ID), fashion styling</td>
+                                    <td class="p-3 lang-zh">自研高利润率模型。锁脸（Soul ID）、角色与时尚风格固定</td>
+                                    <td class="p-3 text-emerald-400 font-mono">2 - 5 Credits</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: GTM & PARTNERS (THE GTM REALITY CHECK) -->
+                <div id="content-trends" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
+                            <span>🚀</span> 
+                            <span class="lang-en">GTM Strategy: Scaling through "Higgsfield Apps"</span>
+                            <span class="lang-zh">商业化探索：无代码“Higgsfield Apps”病毒式裂变</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 5 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-zinc-200 mb-1">
+                                <span class="lang-en">The "No-Code GenAI App Factory" Lever</span>
+                                <span class="lang-zh">释放“无代码生成式 AI 应用工厂”</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Released in 2026, **"Higgsfield Apps"** allows creators to describe a specific workflow in plain text (e.g., "create a face-swapping viral meme tool") and auto-generate a standalone, hosted web app. Crucially, end-users who play these generated web games burn **their own** subscription credits, eliminating server/hosting overhead for developers and driving zero-CAC platform acquisition.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                在 2026 年，他们上线了核武器功能 **"Apps"**。创作者只需通过自然语言（例如“帮我做个趣味换脸视频生成工具”），系统便会自动构建一整套带前后端、数据库并自动集成 15+ 模型的独立网页。最巧妙的是：**别人在这个独立网页上玩视频生成时，扣除的是玩家自己的订阅积分**，帮开发者实现零服务器成本的病毒式裂变与获客（0-CAC）。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm text-amber-400 flex items-center gap-2 mb-2">
+                                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                                <span class="lang-en">The Aggregator Underwriting Checklist</span>
+                                <span class="lang-zh">风投排雷：聚合器合规性与生命力审讯清单</span>
+                            </h3>
+                            <ul class="text-xs text-zinc-400 space-y-2 list-disc pl-5">
+                                <li>
+                                    <strong class="lang-en">Wholesale API Pricing Contract:</strong>
+                                    <strong class="lang-zh">批发 API 采购合同保护期：</strong>
+                                    <span class="lang-en">Does Higgsfield have a locked-in, long-term discount rate for premium APIs like Sora 2 and Kling 3.0?</span>
+                                    <span class="lang-zh">他们和快手、OpenAI 是否签署了长线的 API 折扣采购合同？如果大厂明年提价，套利利润率是否会瞬间崩溃？</span>
+                                </li>
+                                <li>
+                                    <strong class="lang-en">In-house vs Third-party Render Share:</strong>
+                                    <strong class="lang-zh">自研与第三方渲染的真实占比：</strong>
+                                    <span class="lang-en">What percentage of the 2M+ daily videos are run on high-margin in-house models (Soul) versus expensive partner APIs?</span>
+                                    <span class="lang-zh">在每日 200 万视频生成中，到底有多少比例是在他们高利润的自研模型上跑的，又有多少比例是在极其昂贵的第三方 API 上跑的？</span>
+                                </li>
+                                <li>
+                                    <strong class="lang-en">Copyright Responsibility Waiver:</strong>
+                                    <strong class="lang-zh">版权侵权法律责任切割：</strong>
+                                    <span class="lang-en">As an aggregator routing to partner models, who bears the legal liability if a generated video triggers an intellectual property lawsuit?</span>
+                                    <span class="lang-zh">作为多模型分发中介，一旦用户生成的视频侵犯了某个大牌 IP，由此产生的法律诉讼是由 Higgsfield 承担，还是由底层的 ByteDance/OpenAI 来背锅？</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Highlight Box: Core Thesis Summary -->
+            <div class="bg-zinc-950 rounded-xl border border-amber-500/20 p-5">
+                <h3 class="text-xs font-bold text-amber-400 font-mono uppercase tracking-wider mb-2">
+                    <span class="lang-en">The Core Investment Underwriting Thesis</span>
+                    <span class="lang-zh">核心投资逻辑底层研判</span>
+                </h3>
+                <p class="text-sm text-zinc-300 leading-relaxed font-semibold italic lang-en">
+                    "The matter is whether you believe it can transform its current rapid growth into an ecosystem-level enterprise capable of challenging industry giants and generating sustained profits — rather than simply becoming a hot but short-lived app."
+                </p>
+                <p class="text-sm text-zinc-300 leading-relaxed font-semibold italic lang-zh">
+                    “投资的核心关键，在于你是否相信它能够将目前的爆发性增长，沉淀、转化为一个具有生态级壁垒、能够挑战底层行业巨头并持续盈利的常青企业——而不仅仅是一时风头无两但生命周期极短的‘日抛型’爆款App。”
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Interactive Compute Burn & Inference Economics Simulator -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-6 space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>⚡</span> 
+                        <span class="lang-en">Aggregator Economics Simulator</span>
+                        <span class="lang-zh">聚合器单位经济学仿真模拟器</span>
+                    </h2>
+                    <p class="text-xs text-zinc-400 mt-1 lang-en">Simulate Monthly Credit Arbitrage, API Costs, & Profitability</p>
+                    <p class="text-xs text-zinc-400 mt-1 lang-zh">实时仿真其月度多模型调度、API 采购支出与财务毛利表现</p>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="space-y-4">
+                    <!-- Control 1: Active Users -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Active Monthly Paying Creators</span>
+                            <span class="text-zinc-400 lang-zh">月度活跃付费创作者（人）</span>
+                            <span class="font-mono text-amber-400 font-semibold" id="val-users">50,000</span>
+                        </div>
+                        <input type="range" id="input-users" min="5000" max="500000" step="5000" value="50000" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    </div>
+
+                    <!-- Control 2: Daily Videos per User -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Daily Video Generations / Creator</span>
+                            <span class="text-zinc-400 lang-zh">每人每日平均生成视频数</span>
+                            <span class="font-mono text-amber-400 font-semibold" id="val-videos">3</span>
+                        </div>
+                        <input type="range" id="input-videos" min="1" max="15" step="1" value="3" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    </div>
+
+                    <!-- Control 3: Third-Party API share -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Third-Party API Route Share</span>
+                            <span class="text-zinc-400 lang-zh">第三方 API 调用分流占比 (Sora/Kling)</span>
+                            <span class="font-mono text-amber-400 font-semibold" id="val-api-share">60%</span>
+                        </div>
+                        <input type="range" id="input-api-share" min="10" max="90" step="5" value="60" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    </div>
+
+                    <!-- Control 4: Average Third-Party API Fee -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Blended Third-Party API Cost / Video</span>
+                            <span class="text-zinc-400 lang-zh">平均第三方 API 混合采购费 (美金/单次)</span>
+                            <span class="font-mono text-amber-400 font-semibold">$<span id="val-api-cost">0.05</span></span>
+                        </div>
+                        <input type="range" id="input-api-cost" min="0.02" max="0.30" step="0.01" value="0.05" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    </div>
+
+                    <!-- Control 5: Average ARPU -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Average ARPU (Monthly Price)</span>
+                            <span class="text-zinc-400 lang-zh">综合平均订阅单价 / 混合ARPU (美金)</span>
+                            <span class="font-mono text-amber-400 font-semibold" id="val-sub">$17.40</span>
+                        </div>
+                        <input type="range" id="input-sub" min="9.00" max="119.00" step="1.00" value="17.40" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="h-px bg-zinc-800"></div>
+
+                <!-- Live Output Displays -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Videos Gen / Month</span>
+                            <span class="lang-zh">月视频生成总量</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-white mt-1" id="out-total-videos">4,500,000</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Third-Party API Calls</span>
+                            <span class="lang-zh">第三方 API 调用总频次</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-white mt-1" id="out-api-calls">2,700,000</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Blended Cost / Video</span>
+                            <span class="lang-zh">单条视频综合算力成本</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-red-400 mt-1" id="out-cost-per-video">$0.032</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Blended Gross Margin</span>
+                            <span class="lang-zh">平台综合毛利边界</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-emerald-400 mt-1" id="out-margin">83%</div>
+                    </div>
+                </div>
+
+                <!-- Macro Financial Impact Summary -->
+                <div class="p-4 rounded-xl border bg-zinc-900/30 text-xs flex flex-col gap-2" id="box-health-border">
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500 lang-en">Estimated Monthly SaaS Revenue:</span>
+                        <span class="text-zinc-500 lang-zh">预估月度订阅营收 (SaaS):</span>
+                        <span class="text-white font-semibold" id="out-rev">$870,000</span>
+                    </div>
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500 lang-en">Third-Party API Billing:</span>
+                        <span class="text-zinc-500 lang-zh">第三方 API 上游采购总账单:</span>
+                        <span class="text-red-400 font-semibold" id="out-gpu-cost">-$135,000</span>
+                    </div>
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500 lang-en">In-house Model Host (DO Cloud):</span>
+                        <span class="text-zinc-500 lang-zh">自研模型托管成本 (DO专有云):</span>
+                        <span class="text-amber-400 font-semibold" id="out-electricity">-$9,000</span>
+                    </div>
+                    <div class="h-px bg-zinc-800 my-1"></div>
+                    <div class="flex justify-between text-sm font-bold font-mono">
+                        <span class="text-zinc-400 lang-en">SaaS Net Runrate:</span>
+                        <span class="text-zinc-400 lang-zh">平台运营净损益 (GP):</span>
+                        <span class="text-emerald-400" id="out-net">+$726,000/mo</span>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="text-[10px] text-zinc-500 italic leading-relaxed text-center">
+                    <span class="lang-en">Note: Model assumes 40% of generations are dynamically routed to lightweight, proprietary in-house models (Soul 2.0 / DOP), which cost under $0.005 per render to host on DigitalOcean.</span>
+                    <span class="lang-zh">注：计算模型默认 40% 的生成任务会智能路由至自研轻量模型（Soul 2.0 / DOP），其在 DigitalOcean 专有云上的单视频渲染成本可压至 0.005 美元以内。</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 py-4 px-6 text-center text-xs text-zinc-500 flex flex-wrap justify-between items-center gap-4">
+        <span class="lang-en">© 2026 Summit House Ventures • Confidential Due Diligence Platform</span>
+        <span class="lang-zh">© 2026 Summit House Ventures • 内部机密尽职调查决策沙盒</span>
+        <span class="font-mono text-[10px] bg-zinc-900 py-1 px-2 rounded border border-zinc-800">COMPILED BY AI INVESTMENT ENGINE V3 • REAL-WORLD 2026 FINANCIAL INTEGRATION</span>
+    </footer>
+
+    <!-- Tab Switching and Compute Calculation Logic -->
+    <script>
+        function setLanguage(lang) {
+            document.documentElement.setAttribute('data-lang', lang);
+            const btnEn = document.getElementById('btn-lang-en');
+            const btnZh = document.getElementById('btn-lang-zh');
+            if (lang === 'zh') {
+                btnZh.className = "text-xs px-2.5 py-1 rounded font-medium transition-all bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono";
+                btnEn.className = "text-xs px-2.5 py-1 rounded font-medium transition-all text-zinc-400 hover:text-white font-mono";
+            } else {
+                btnEn.className = "text-xs px-2.5 py-1 rounded font-medium transition-all bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono";
+                btnZh.className = "text-xs px-2.5 py-1 rounded font-medium transition-all text-zinc-400 hover:text-white font-mono";
+            }
+        }
+
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabs = ['good', 'bad', 'business', 'tech', 'trends'];
+            tabs.forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).className = "flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white";
+            });
+
+            // Show active tab content
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            
+            // Highlight active button
+            let activeColor = "border-zinc-700 bg-zinc-800 text-white shadow-sm";
+            if (tabId === 'bad') activeColor = "border-red-900/40 bg-red-950/20 text-red-400 shadow-sm";
+            if (tabId === 'business') activeColor = "border-sky-900/40 bg-sky-950/20 text-sky-400 shadow-sm";
+            if (tabId === 'tech') activeColor = "border-yellow-900/40 bg-yellow-950/20 text-yellow-400 shadow-sm";
+            if (tabId === 'trends') activeColor = "border-indigo-900/40 bg-indigo-950/20 text-indigo-400 shadow-sm";
+
+            document.getElementById(`tab-${tabId}`).className = `flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 ${activeColor} border`;
+        }
+
+        function calculateCompute() {
+            // Grab inputs
+            const users = parseInt(document.getElementById('input-users').value);
+            const videos = parseInt(document.getElementById('input-videos').value);
+            const apiShare = parseInt(document.getElementById('input-api-share').value) / 100;
+            const apiCost = parseFloat(document.getElementById('input-api-cost').value);
+            const subPrice = parseFloat(document.getElementById('input-sub').value);
+
+            // Update UI slider values
+            document.getElementById('val-users').innerText = users.toLocaleString();
+            document.getElementById('val-videos').innerText = videos;
+            document.getElementById('val-api-share').innerText = Math.round(apiShare * 100) + '%';
+            document.getElementById('val-api-cost').innerText = apiCost.toFixed(2);
+            document.getElementById('val-sub').innerText = '$' + subPrice.toFixed(2);
+
+            // Compute values
+            const totalVideosMonth = users * videos * 30; // 30 days
+            const apiCallsMonth = totalVideosMonth * apiShare;
+            const inhouseCallsMonth = totalVideosMonth * (1 - apiShare);
+
+            // Costs
+            const thirdPartyApiCost = apiCallsMonth * apiCost;
+            // In-house model hosting on DigitalOcean averages $0.005 per render
+            const inhouseHostCost = inhouseCallsMonth * 0.005;
+            const totalMonthlyCost = thirdPartyApiCost + inhouseHostCost;
+
+            // Unit cost per video
+            const blendedCostPerVideo = totalMonthlyCost / totalVideosMonth;
+
+            // Finance
+            const estimatedRevenue = users * subPrice;
+            const grossProfitMargin = ((estimatedRevenue - totalMonthlyCost) / estimatedRevenue) * 100;
+            const netRunrate = estimatedRevenue - totalMonthlyCost;
+
+            // Update output fields
+            document.getElementById('out-total-videos').innerText = totalVideosMonth.toLocaleString();
+            document.getElementById('out-api-calls').innerText = Math.round(apiCallsMonth).toLocaleString();
+            document.getElementById('out-cost-per-video').innerText = '$' + blendedCostPerVideo.toFixed(3);
+            document.getElementById('out-margin').innerText = Math.round(grossProfitMargin) + '%';
+            document.getElementById('out-rev').innerText = '$' + Math.round(estimatedRevenue).toLocaleString();
+            document.getElementById('out-gpu-cost').innerText = '-$' + Math.round(thirdPartyApiCost).toLocaleString();
+            document.getElementById('out-electricity').innerText = '-$' + Math.round(inhouseHostCost).toLocaleString();
+
+            // Handle Profit vs Loss visual coloring
+            const netEl = document.getElementById('out-net');
+            const healthBorder = document.getElementById('box-health-border');
+            if (netRunrate >= 0) {
+                netEl.innerText = '+$' + Math.round(netRunrate).toLocaleString() + '/mo';
+                netEl.className = "text-emerald-400 font-mono";
+                healthBorder.className = "p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/10 text-xs flex flex-col gap-2";
+            } else {
+                netEl.innerText = '-$' + Math.round(Math.abs(netRunrate)).toLocaleString() + '/mo';
+                netEl.className = "text-red-400 font-mono";
+                healthBorder.className = "p-4 rounded-xl border border-red-500/20 bg-red-950/10 text-xs flex flex-col gap-2";
+            }
+        }
+
+        // Initialize calculations on script load
+        calculateCompute();
+    </script>
+</body>
+</html>
