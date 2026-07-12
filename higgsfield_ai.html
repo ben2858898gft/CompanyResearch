@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Higgsfield.ai Deep-Dive Technical DD & Compute Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+        
+        /* Language Toggle Rules */
+        [data-lang="en"] .lang-zh { display: none !important; }
+        [data-lang="zh"] .lang-en { display: none !important; }
+    </style>
+</head>
+<body class="text-zinc-100 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                    Higgsfield.ai 
+                    <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono lang-en">TECHNICAL DD BOARD</span>
+                    <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono lang-zh">技术尽职调查看板</span>
+                </h1>
+                <p class="text-xs text-zinc-400 lang-en">Engineering-First Investment Evaluation & Compute Economics Simulator</p>
+                <p class="text-xs text-zinc-400 lang-zh">工程第一性原理投资评估与算力经济学模拟器</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Language Switcher Button -->
+            <div class="flex items-center bg-zinc-900 border border-zinc-800 rounded-lg p-1 mr-2">
+                <button onclick="setLanguage('en')" id="btn-lang-en" class="text-xs px-2.5 py-1 rounded font-medium transition-all bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">EN</button>
+                <button onclick="setLanguage('zh')" id="btn-lang-zh" class="text-xs px-2.5 py-1 rounded font-medium transition-all text-zinc-400 hover:text-white font-mono">中</button>
+            </div>
+            <div class="h-4 w-px bg-zinc-800"></div>
+            <span class="text-xs text-zinc-500 font-mono">HIGGSFIELD.AI DD</span>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Sidebar: Framework Selector & Bulletproof Analysis -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            <!-- Navigation Tabs -->
+            <div class="bg-zinc-900 p-1.5 rounded-xl border border-zinc-800 flex flex-wrap gap-1">
+                <button onclick="switchTab('good')" id="tab-good" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 bg-zinc-800 text-white shadow-sm border border-zinc-700">
+                    <span class="lang-en">👍 Good Part</span>
+                    <span class="lang-zh">👍 优势与护城河</span>
+                </button>
+                <button onclick="switchTab('bad')" id="tab-bad" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">⚠️ Risks & Bad</span>
+                    <span class="lang-zh">⚠️ 潜在风险源</span>
+                </button>
+                <button onclick="switchTab('business')" id="tab-business" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">💰 Business Model</span>
+                    <span class="lang-zh">💰 商业变现模型</span>
+                </button>
+                <button onclick="switchTab('tech')" id="tab-tech" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">🧬 Core Tech</span>
+                    <span class="lang-zh">🧬 竞争与核心技术</span>
+                </button>
+                <button onclick="switchTab('trends')" id="tab-trends" class="flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    <span class="lang-en">🚀 GTM & Partners</span>
+                    <span class="lang-zh">🚀 合作伙伴及趋势</span>
+                </button>
+            </div>
+
+            <!-- Tab Content Display Area -->
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-6 flex-1 min-h-[480px]">
+                
+                <!-- TAB 1: GOOD PART -->
+                <div id="content-good" class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
+                            <span>👍</span> 
+                            <span class="lang-en">The Good Part: Core Advantages & Moats</span>
+                            <span class="lang-zh">公司优势与壁垒分析</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 1 OF 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                <span class="lang-en">SOTA Motion & Face Control</span>
+                                <span class="lang-zh">SOTA级面部与物理动作控制</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Unlike OpenAI Sora (which operates as a creative "black box"), Higgsfield targets social creators with pixel-level <strong>character consistency</strong> and high-fidelity <strong>pose control</strong> (via their flagship app <em>Diffuse</em>). Users upload a single photo and drive precise dynamic actions, completely matching influencer-level demands.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                不同于 OpenAI Sora（运作起来像是一个无法修改微调的“创意黑盒”），Higgsfield 旗下旗舰 App <strong>Diffuse</strong> 专注于像素级的<strong>人物特征一致性</strong>与高保真<strong>动作控制（Pose Control）</strong>。用户只需上传一张普通照片即可精准驱动极其复杂的物理动态，极高地满足了网红创作者的刚需。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                <span class="lang-en">Top-Tier Social Media DNA</span>
+                                <span class="lang-zh">顶级社交大厂工程基因团队</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Founder <strong>Alex Mashrabov</strong> brings elite pedigree. He was the director of Generative AI at <strong>Snapchat</strong> after they acquired his last startup (AI Factory) for $166M. The team understands what social creators, advertisers, and viral loops actually need to scale overnight.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                创始人 <strong>Alex Mashrabov</strong> 履历极其硬核，曾任 <strong>Snapchat 生成式 AI 部门总监</strong>，其上一家 AI 视觉初创公司（AI Factory）以 1.66 亿美元的高价被 Snap 收购。团队深刻理解社交网络网红、广告买量及病毒式传播对模型的真实需求。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                <span class="lang-en">Mobile-First Optimization</span>
+                                <span class="lang-zh">移动端优先的轻量算力优化</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Traditional model companies build heavy Web-based platforms meant for workstation rendering. Higgsfield’s video models are compressed and optimized specifically for smartphone workflows, lowering the friction for immediate mobile distribution (TikTok, Reels, UA Ads).
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                传统的视频大模型公司大多构建笨重的网页端平台，仅适合工作站渲染。Higgsfield 则自研专为智能手机优化的视频基础模型。通过模型蒸馏和压缩，让创作者直接在移动设备完成生成，极大地降低了 TikTok、Reels 以及买量视频广告（UA Ads）的制作门槛。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                <span class="lang-en">Sizable Seed Funding</span>
+                                <span class="lang-zh">高信誉种子轮资本加持</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Backed by <strong>Menlo Ventures</strong> (known for Anthropic) and <strong>Bitkraft Ventures</strong>, raising a strong $8M seed round. They have the premium credibility to attract highly specialized generative video scientists away from legacy tech giants.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                获得了领投过 Anthropic 的 <strong>Menlo Ventures</strong> 以及顶级游戏基金 <strong>Bitkraft Ventures</strong> 领投的 800 万美元种子轮融资。大牌 VC 的背书让他们拥有极强的行业信誉，能从老牌科技巨头手中争夺稀缺的视频生成科学家。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: RISKS & BAD -->
+                <div id="content-bad" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-red-400 flex items-center gap-2">
+                            <span>⚠️</span> 
+                            <span class="lang-en">The Bad / Risks Part: Hidden Landmines</span>
+                            <span class="lang-zh">潜在风险源及系统死穴</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 2 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">01</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">
+                                    <span class="lang-en">The "Lensa AI" Retention Trap</span>
+                                    <span class="lang-zh">“Lensa AI式”病毒玩具留存陷阱</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-en">
+                                    Generative AI applications frequently suffer from high initial virality but <strong>abysmal long-term retention</strong>. If the Pose Control is just a "one-week gimmick" for creators, their churn rate will skyrocket, flattening their growth curve and rendering a high valuation unsustainable.
+                                </p>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-zh">
+                                    生成式 AI 应用普遍面临一个致命伤：<strong>初期病毒式传播极快，但长期留存率极低</strong>。如果动作替换和换脸控制只是博主们玩一两次就腻的“新鲜玩具”，后续的用户退订率（Churn Rate）将直线上升，导致业务增长曲线迅速见顶。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">02</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">
+                                    <span class="lang-en">Commoditization by Platforms</span>
+                                    <span class="lang-zh">平台级巨头的降维打击</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-en">
+                                    If TikTok's CapCut or Adobe Premiere integrates character consistency and pose-control pipelines natively into their existing editors, the need for a standalone app like Diffuse shrinks to zero. Higgsfield lacks the ecosystem lock-in of native production suites.
+                                </p>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-zh">
+                                    一旦字节跳动旗下的<strong>剪映（CapCut）</strong>或者 Adobe Premiere 直接在编辑器原生层集成了“角色一致性”和“动作轨迹控制”等底层管线，创作者使用独立 App 制作视频的动力将趋近于零。Higgsfield 面临缺乏生态锁定的系统挑战。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">03</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">
+                                    <span class="lang-en">The GPU Cash Furnace</span>
+                                    <span class="lang-zh">算力吞金兽与极速现金消耗率</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-en">
+                                    Video generation models are the most computationally expensive models in existence. The $8M Seed funding can be burned through in months just on NVIDIA H100 cloud leases and infrastructure cooling, forcing them into a cycle of constant, dilutive capital raises.
+                                </p>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed lang-zh">
+                                    视频基础模型的训练和推理是目前工程界最昂贵的算力开销。在 NVIDIA H100 等显卡租赁费和云服务折旧费面前，800 万美元可能在几个月内被烧光，进而迫使公司陷入频繁、且不断稀释股权的下一轮资本周期中。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: BUSINESS MODEL -->
+                <div id="content-business" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-sky-400 flex items-center gap-2">
+                            <span>💰</span> 
+                            <span class="lang-en">Business Model: Revenue Mechanics</span>
+                            <span class="lang-zh">商业模式：多元变现机制</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 3 OF 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-sky-400 font-mono tracking-wider mb-1 uppercase">
+                                    <span class="lang-en">Tier 1: Creator SaaS</span>
+                                    <span class="lang-zh">一档：创作者 SaaS</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white mb-2">
+                                    <span class="lang-en">Pro Subscription</span>
+                                    <span class="lang-zh">专业版月度订阅</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-en">
+                                    Targeting solo influencers and freelance marketers. Offers priority cloud rendering, higher resolutions, and unlimited custom character locks.
+                                </p>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-zh">
+                                    专门针对独立网红创作者及自由职业广告营销师。提供云端优先渲染排序、更高的画质分辨率输出以及无限次的自定义角色锁脸。
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$29-$49<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-purple-400 font-mono tracking-wider mb-1 uppercase">
+                                    <span class="lang-en">Tier 2: Business API</span>
+                                    <span class="lang-zh">二档：商业 API</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white mb-2">
+                                    <span class="lang-en">Inference / API Volume</span>
+                                    <span class="lang-zh">推理接口按调用计费</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-en">
+                                    Charging social media agencies, web3 projects, and automated marketing tools per generated video frame via highly optimized API endpoints.
+                                </p>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-zh">
+                                    针对数字广告投放机构、自动化内容营销工厂，按视频帧数和渲染耗时，通过优化后的 API 端点直接按量计费结算。
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$0.05 - $0.15<span class="text-xs text-zinc-500">/video</span></div>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-emerald-400 font-mono tracking-wider mb-1 uppercase">
+                                    <span class="lang-en">Tier 3: Enterprise GTM</span>
+                                    <span class="lang-zh">三档：大企业定制</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white mb-2">
+                                    <span class="lang-en">Brand Fine-Tuning</span>
+                                    <span class="lang-zh">品牌及 IP 专属微调</span>
+                                </h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-en">
+                                    Custom enterprise plans for game publishers to train tailored characters and IP assets for localized ad campaigns.
+                                </p>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4 lang-zh">
+                                    针对大厂及游戏发行商的定制专属方案。帮企业私有微调品牌IP模型，一键生成多语言、多地区本地化的广告素材和买量片。
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$5K - $20K<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: CORE TECH -->
+                <div id="content-tech" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-yellow-500 flex items-center gap-2">
+                            <span>🧬</span> 
+                            <span class="lang-en">Core Technology & Competitor Analysis</span>
+                            <span class="lang-zh">竞争格局与核心技术壁垒分析</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 4 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-zinc-900/20 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-zinc-200 mb-2">
+                                <span class="lang-en">Can they maintain a technological lead?</span>
+                                <span class="lang-zh">他们的核心技术优势能否保持长线领先？</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                The underlying research in generative video (DiT - Diffusion Transformers) is rapidly commoditizing. While Higgsfield's 3D pose alignment and tracking architecture are proprietary, open-source models (like Stable Video Diffusion, Hunyuan, or CogVideo) are closing the gap in weeks rather than years.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                视频生成算法的底层架构（DiT 扩散转换器）正在迅速同质化。尽管 Higgsfield 在 3D 动作姿态对齐、追踪架构上拥有独家专利，但开源模型（如 CogVideo、Hunyuan 视频模型等）正在缩短这一技术差距，差距在以“周”为单位缩小。
+                            </p>
+                        </div>
+                        <table class="w-full text-xs text-left text-zinc-300">
+                            <thead class="bg-zinc-900 text-zinc-500 font-mono">
+                                <tr>
+                                    <th class="p-3">
+                                        <span class="lang-en">Player</span>
+                                        <span class="lang-zh">竞品/企业</span>
+                                    </th>
+                                    <th class="p-3">
+                                        <span class="lang-en">Core Edge</span>
+                                        <span class="lang-zh">核心壁垒</span>
+                                    </th>
+                                    <th class="p-3">
+                                        <span class="lang-en">Core Disadvantage</span>
+                                        <span class="lang-zh">致命短板</span>
+                                    </th>
+                                    <th class="p-3">
+                                        <span class="lang-en">Focus Market</span>
+                                        <span class="lang-zh">专注场景</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800">
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Sora / Luma</td>
+                                    <td class="p-3 text-emerald-400 lang-en">Extreme Fidelity</td>
+                                    <td class="p-3 text-emerald-400 lang-zh">极致画质与物理模拟</td>
+                                    <td class="p-3 text-red-400 lang-en">Abysmal Control, High Cost</td>
+                                    <td class="p-3 text-red-400 lang-zh">不可控、算力成本极高</td>
+                                    <td class="p-3 lang-en">Cinematic / Creative B-Roll</td>
+                                    <td class="p-3 lang-zh">影视级、长镜头镜头空镜</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Runway / Pika</td>
+                                    <td class="p-3 text-emerald-400 lang-en">Enterprise Suites</td>
+                                    <td class="p-3 text-emerald-400 lang-zh">完整的企业端全套工具箱</td>
+                                    <td class="p-3 text-red-400 lang-en">Poor Mobile Loop</td>
+                                    <td class="p-3 text-red-400 lang-zh">移动端闭环生态较弱</td>
+                                    <td class="p-3 lang-en">Ad Agencies & VFX Teams</td>
+                                    <td class="p-3 lang-zh">广告代理商与特效工作室</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Higgsfield</td>
+                                    <td class="p-3 text-emerald-400 lang-en">Pose & Face Consistency</td>
+                                    <td class="p-3 text-emerald-400 lang-zh">动作精准追踪与一致人物锁脸</td>
+                                    <td class="p-3 text-red-400 lang-en">Raw Model Capacity</td>
+                                    <td class="p-3 text-red-400 lang-zh">超大电影级宽幅渲染能力稍弱</td>
+                                    <td class="p-3 text-amber-400 lang-en">Social Creators & Mobile Ads</td>
+                                    <td class="p-3 text-amber-400 lang-zh">社交媒体网红与手机短视频买量</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: GTM & PARTNERS -->
+                <div id="content-trends" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
+                            <span>🚀</span> 
+                            <span class="lang-en">GTM Strategy & Partnership Integrity</span>
+                            <span class="lang-zh">市场切入（GTM）与合作伙伴成色</span>
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 5 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-zinc-200 mb-1">
+                                <span class="lang-en">MCNs & User Acquisition (UA) Partnerships</span>
+                                <span class="lang-zh">MCN机构与移动游戏买量合作</span>
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-en">
+                                Their primary strategic partnership vectors are <strong>digital marketing agencies</strong> and <strong>mobile gaming studios</strong> (primarily introduced via their investor Bitkraft). These studios use Higgsfield to instantly generate thousands of localized ad variations for game characters.
+                            </p>
+                            <p class="text-xs text-zinc-400 leading-relaxed lang-zh">
+                                Higgsfield 核心的商业合作抓手在于 **数字广告投放代运营** 以及 **中重度游戏厂商**（由于 Bitkraft 基金的股东背景，这部分流量转换极快）。游戏厂使用 Higgsfield 能够在几小时内，低成本低门槛地为游戏 IP 生成上千条带有细微差异的本地化买量展示广告。
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm text-amber-400 flex items-center gap-2 mb-2">
+                                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                                <span class="lang-en">The DD Checklist: Checking the Contract Reality</span>
+                                <span class="lang-zh">尽职调查排雷清单：剥离意向书（MOU）的水分</span>
+                            </h3>
+                            <ul class="text-xs text-zinc-400 space-y-2 list-disc pl-5">
+                                <li>
+                                    <strong class="lang-en">Paid ARR vs. Non-Binding MOUs:</strong>
+                                    <strong class="lang-zh">真金白银的 ARR 还是无约束力意向书（MOU）：</strong>
+                                    <span class="lang-en">Are their gaming partnerships generating recurring licensing revenue or are they just free trial pilots?</span>
+                                    <span class="lang-zh">游戏厂商和广告公司接入他们的 API，目前是真金白银付月费订阅，还是仅仅签署了一份“免费试用/不具约束力”的合作意向书？</span>
+                                </li>
+                                <li>
+                                    <strong class="lang-en">User Acquisition Cost (CAC) Dependency:</strong>
+                                    <strong class="lang-zh">买量获客成本（CAC）的可持续性：</strong>
+                                    <span class="lang-en">Are they spending their precious cash buying TikTok ads to acquire users, or is growth purely organic?</span>
+                                    <span class="lang-zh">Diffuse 应用目前的数据暴增，是靠他们花现金在 TikTok 上买流量强行刷出来的（高 CAC），还是凭借自发的社群病毒裂变形成的？</span>
+                                </li>
+                                <li>
+                                    <strong class="lang-en">Copyright / Licensing Safeguards:</strong>
+                                    <strong class="lang-zh">版权纠纷与数据集合规风险：</strong>
+                                    <span class="lang-en">Do they have proper protection against training datasets (Fair Use vs. Potential Copyright Lawsuits)?</span>
+                                    <span class="lang-zh">他们的底层视频大模型在进行预训练时，是否存在侵权爬取版权视频的情况（合理使用 vs. 诉讼隐患）？</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Highlight Box: Core Thesis Summary -->
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-5">
+                <h3 class="text-xs font-bold text-emerald-400 font-mono uppercase tracking-wider mb-2">
+                    <span class="lang-en">Core Investment Logic</span>
+                    <span class="lang-zh">核心投资逻辑判断</span>
+                </h3>
+                <p class="text-sm text-zinc-300 leading-relaxed lang-en">
+                    "Higgsfield represents a highly focused Go-To-Market bet. Its primary value driver is character consistency and granular motion control. Our investment must be contingent on verifying that their inference economics do not scale into a massive loss-making structure and that their gaming/marketing partnerships represent contractual ARR rather than unverified pilot projects."
+                </p>
+                <p class="text-sm text-zinc-300 leading-relaxed lang-zh">
+                    “Higgsfield 是一项高度聚焦的 GTM（市场切入）押注。其核心价值驱动在于角色一致性和颗粒度极细的动作控制。我们的投资必须取决于两点：验证其推理单位经济模型（Unit Economics）不会演变成巨额亏损结构，并核实其游戏/营销合作伙伴代表的是具有法律约束力的合同年经常性收入（ARR），而非未经证实的试点项目。”
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Interactive Compute Burn & Inference Economics Simulator -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-6 space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>⚡</span> 
+                        <span class="lang-en">Compute & Unit Economics Simulator</span>
+                        <span class="lang-zh">算力与单位经济学计算模拟器</span>
+                    </h2>
+                    <p class="text-xs text-zinc-400 mt-1 lang-en">Simulate Monthly Infrastructure Burn Rate (H100 GPU Instances)</p>
+                    <p class="text-xs text-zinc-400 mt-1 lang-zh">实时仿真其月度底层基础设施（H100 GPU）烧钱现金消耗率</p>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="space-y-4">
+                    <!-- Control 1: Active Users -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Monthly Active Creators</span>
+                            <span class="text-zinc-400 lang-zh">月活跃创作者（人）</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-users">5,000</span>
+                        </div>
+                        <input type="range" id="input-users" min="1000" max="50000" step="1000" value="5000" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 2: Daily Videos per User -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Daily Video Generations / Creator</span>
+                            <span class="text-zinc-400 lang-zh">每人每日平均生成视频数</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-videos">3</span>
+                        </div>
+                        <input type="range" id="input-videos" min="1" max="15" step="1" value="3" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 3: H100 Hourly Cost -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">NVIDIA H100 Lease Cost (Hourly)</span>
+                            <span class="text-zinc-400 lang-zh">H100 GPU 租赁时薪 (美金)</span>
+                            <span class="font-mono text-emerald-400 font-semibold">$<span id="val-h100">2.20</span></span>
+                        </div>
+                        <input type="range" id="input-h100" min="1.50" max="4.00" step="0.10" value="2.20" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 4: Inference Steps (Complexity) -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Inference Render Time per Video</span>
+                            <span class="text-zinc-400 lang-zh">单视频云端平均渲染时长</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-render">15s</span>
+                        </div>
+                        <input type="range" id="input-render" min="5" max="45" step="5" value="15" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 5: Monthly Subscription Price -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400 lang-en">Assumed Monthly Subscription Fee</span>
+                            <span class="text-zinc-400 lang-zh">设定每月订阅费（美金/Pro版）</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-sub">$29</span>
+                        </div>
+                        <input type="range" id="input-sub" min="9" max="99" step="5" value="29" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="h-px bg-zinc-800"></div>
+
+                <!-- Live Output Displays -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Videos Gen / Month</span>
+                            <span class="lang-zh">月视频生成总量</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-white mt-1" id="out-total-videos">450,000</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Required H100 GPUs</span>
+                            <span class="lang-zh">所需 H100 GPU 数量</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-white mt-1" id="out-gpus">4</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Compute Cost / Video</span>
+                            <span class="lang-zh">单视频算力生成成本</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-red-400 mt-1" id="out-cost-per-video">$0.009</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">
+                            <span class="lang-en">Gross Profit Margin</span>
+                            <span class="lang-zh">算力毛利边界</span>
+                        </div>
+                        <div class="text-lg font-mono font-bold text-emerald-400 mt-1" id="out-margin">97%</div>
+                    </div>
+                </div>
+
+                <!-- Macro Financial Impact Summary -->
+                <div class="p-4 rounded-xl border bg-zinc-900/30 text-xs flex flex-col gap-2" id="box-health-border">
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500 lang-en">Estimated Monthly SaaS Revenue:</span>
+                        <span class="text-zinc-500 lang-zh">预估月度订阅营收 (SaaS):</span>
+                        <span class="text-white font-semibold" id="out-rev">$145,000</span>
+                    </div>
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500 lang-en">Estimated Monthly GPU Server Rent:</span>
+                        <span class="text-zinc-500 lang-zh">预估月度GPU服务器租金:</span>
+                        <span class="text-red-400 font-semibold" id="out-gpu-cost">-$4,125</span>
+                    </div>
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500 lang-en">Monthly Power Draw (Electricity):</span>
+                        <span class="text-zinc-500 lang-zh">月度机房耗电总量 (度):</span>
+                        <span class="text-amber-400 font-semibold" id="out-electricity">2.01 MWh</span>
+                    </div>
+                    <div class="h-px bg-zinc-800 my-1"></div>
+                    <div class="flex justify-between text-sm font-bold font-mono">
+                        <span class="text-zinc-400 lang-en">Compute Net Runrate:</span>
+                        <span class="text-zinc-400 lang-zh">基础算力运营净损益:</span>
+                        <span class="text-emerald-400" id="out-net">+$140,875/mo</span>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="text-[10px] text-zinc-500 italic leading-relaxed text-center">
+                    <span class="lang-en">Note: Power calculations assume standard server TDP metrics (700W peak draw per H100 SXM5 server node). Real-world metrics can scale higher during training phases.</span>
+                    <span class="lang-zh">注：电量换算基于标准服务器 TDP 功耗逻辑（每块 H100 SXM5 加速卡满载功耗按 700瓦 计算）。实际大模型训练阶段功耗会显著升高。</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 py-4 px-6 text-center text-xs text-zinc-500 flex flex-wrap justify-between items-center gap-4">
+        <span class="lang-en">© 2026 Summit House Ventures • Confidential Due Diligence Platform</span>
+        <span class="lang-zh">© 2026 Summit House Ventures • 内部机密尽职调查决策沙盒</span>
+        <span class="font-mono text-[10px] bg-zinc-900 py-1 px-2 rounded border border-zinc-800">COMPILED BY AI INVESTMENT ENGINE V3</span>
+    </footer>
+
+    <!-- Tab Switching and Compute Calculation Logic -->
+    <script>
+        function setLanguage(lang) {
+            document.documentElement.setAttribute('data-lang', lang);
+            const btnEn = document.getElementById('btn-lang-en');
+            const btnZh = document.getElementById('btn-lang-zh');
+            if (lang === 'zh') {
+                btnZh.className = "text-xs px-2.5 py-1 rounded font-medium transition-all bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono";
+                btnEn.className = "text-xs px-2.5 py-1 rounded font-medium transition-all text-zinc-400 hover:text-white font-mono";
+            } else {
+                btnEn.className = "text-xs px-2.5 py-1 rounded font-medium transition-all bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono";
+                btnZh.className = "text-xs px-2.5 py-1 rounded font-medium transition-all text-zinc-400 hover:text-white font-mono";
+            }
+        }
+
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabs = ['good', 'bad', 'business', 'tech', 'trends'];
+            tabs.forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).className = "flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white";
+            });
+
+            // Show active tab content
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            
+            // Highlight active button
+            let activeColor = "border-zinc-700 bg-zinc-800 text-white shadow-sm";
+            if (tabId === 'bad') activeColor = "border-red-900/40 bg-red-950/20 text-red-400 shadow-sm";
+            if (tabId === 'business') activeColor = "border-sky-900/40 bg-sky-950/20 text-sky-400 shadow-sm";
+            if (tabId === 'tech') activeColor = "border-yellow-900/40 bg-yellow-950/20 text-yellow-400 shadow-sm";
+            if (tabId === 'trends') activeColor = "border-indigo-900/40 bg-indigo-950/20 text-indigo-400 shadow-sm";
+
+            document.getElementById(`tab-${tabId}`).className = `flex-1 min-w-[110px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 ${activeColor} border`;
+        }
+
+        function calculateCompute() {
+            // Grab inputs
+            const users = parseInt(document.getElementById('input-users').value);
+            const videos = parseInt(document.getElementById('input-videos').value);
+            const h100Rate = parseFloat(document.getElementById('input-h100').value);
+            const renderTime = parseInt(document.getElementById('input-render').value);
+            const subPrice = parseInt(document.getElementById('input-sub').value);
+
+            // Update UI slider values
+            document.getElementById('val-users').innerText = users.toLocaleString();
+            document.getElementById('val-videos').innerText = videos;
+            document.getElementById('val-h100').innerText = h100Rate.toFixed(2);
+            document.getElementById('val-render').innerText = renderTime + 's';
+            document.getElementById('val-sub').innerText = '$' + subPrice;
+
+            // Compute values
+            const totalVideosMonth = users * videos * 30; // 30 days
+            const totalRenderSeconds = totalVideosMonth * renderTime;
+            const totalHours = totalRenderSeconds / 3600;
+
+            // How many H100 hours we need. (Assuming perfect concurrency mapping)
+            const gpusNeeded = Math.max(1, Math.ceil(totalHours / (24 * 30)));
+            const monthlyGpuCost = gpusNeeded * 24 * 30 * h100Rate;
+            
+            // Unit cost per video
+            const costPerVideo = monthlyGpuCost / totalVideosMonth;
+            
+            // Power draw: H100 server node runs at approx 700 Watts (0.7 kW)
+            const electricityMWh = (gpusNeeded * 24 * 30 * 0.7) / 1000;
+
+            // Finance
+            const estimatedRevenue = users * subPrice;
+            const grossProfitMargin = ((estimatedRevenue - monthlyGpuCost) / estimatedRevenue) * 100;
+            const netRunrate = estimatedRevenue - monthlyGpuCost;
+
+            // Update output fields
+            document.getElementById('out-total-videos').innerText = totalVideosMonth.toLocaleString();
+            document.getElementById('out-gpus').innerText = gpusNeeded;
+            document.getElementById('out-cost-per-video').innerText = '$' + costPerVideo.toFixed(3);
+            document.getElementById('out-margin').innerText = Math.round(grossProfitMargin) + '%';
+            document.getElementById('out-rev').innerText = '$' + estimatedRevenue.toLocaleString();
+            document.getElementById('out-gpu-cost').innerText = '-$' + monthlyGpuCost.toLocaleString();
+            document.getElementById('out-electricity').innerText = electricityMWh.toFixed(2) + ' MWh';
+
+            // Handle Profit vs Loss visual coloring
+            const netEl = document.getElementById('out-net');
+            const healthBorder = document.getElementById('box-health-border');
+            if (netRunrate >= 0) {
+                netEl.innerText = '+$' + netRunrate.toLocaleString() + '/mo';
+                netEl.className = "text-emerald-400 font-mono";
+                healthBorder.className = "p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/10 text-xs flex flex-col gap-2";
+            } else {
+                netEl.innerText = '-$' + Math.abs(netRunrate).toLocaleString() + '/mo';
+                netEl.className = "text-red-400 font-mono";
+                healthBorder.className = "p-4 rounded-xl border border-red-500/20 bg-red-950/10 text-xs flex flex-col gap-2";
+            }
+        }
+
+        // Initialize calculations on script load
+        calculateCompute();
+    </script>
+</body>
+</html>
