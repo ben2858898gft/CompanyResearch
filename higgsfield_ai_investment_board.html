@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Higgsfield.ai Deep-Dive Technical DD & Compute Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+    </style>
+</head>
+<body class="text-zinc-100 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                    Higgsfield.ai <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">TECHNICAL DD BOARD</span>
+                </h1>
+                <p class="text-xs text-zinc-400">Engineering-First Investment Evaluation & Compute Economics Simulator</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="text-xs text-zinc-500 font-mono">TARGET RUNRATE: $1.0B CAP</span>
+            <div class="h-4 w-px bg-zinc-800"></div>
+            <span class="text-xs px-2 py-1 bg-zinc-900 rounded border border-zinc-800 text-zinc-300 font-mono">SCENARIO: PRE-SEED TO A</span>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Sidebar: Framework Selector & Bulletproof Analysis -->
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            <!-- Navigation Tabs -->
+            <div class="bg-zinc-900 p-1.5 rounded-xl border border-zinc-800 flex flex-wrap gap-1">
+                <button onclick="switchTab('good')" id="tab-good" class="flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 bg-zinc-800 text-white shadow-sm border border-zinc-700">
+                    👍 Good Part
+                </button>
+                <button onclick="switchTab('bad')" id="tab-bad" class="flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    ⚠️ Risks & Bad
+                </button>
+                <button onclick="switchTab('business')" id="tab-business" class="flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    💰 Business Model
+                </button>
+                <button onclick="switchTab('tech')" id="tab-tech" class="flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    🧬 Core Tech
+                </button>
+                <button onclick="switchTab('trends')" id="tab-trends" class="flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white">
+                    🚀 GTM & Partners
+                </button>
+            </div>
+
+            <!-- Tab Content Display Area -->
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-6 flex-1 min-h-[480px]">
+                
+                <!-- TAB 1: GOOD PART -->
+                <div id="content-good" class="space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
+                            <span>👍</span> The Good Part: Core Advantages & Moats
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 1 OF 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                SOTA Motion & Face Control
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                Unlike OpenAI Sora (which operates as a creative "black box"), Higgsfield targets social creators with pixel-level <strong>character consistency</strong> and high-fidelity <strong>pose control</strong> (via their flagship app <em>Diffuse</em>). Users upload a single photo and drive precise dynamic actions, completely matching influencer-level demands.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                Top-Tier Social Media DNA
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                Founder <strong>Alex Mashrabov</strong> brings elite pedigree. He was the director of Generative AI at <strong>Snapchat</strong> after they acquired his last startup (AI Factory) for $166M. The team understands what social creators, advertisers, and viral loops actually need to scale overnight.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                Mobile-First Optimization
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                Traditional model companies build heavy Web-based platforms meant for workstation rendering. Higgsfield’s video models are compressed and optimized specifically for smartphone workflows, lowering the friction for immediate mobile distribution (TikTok, Reels, UA Ads).
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+                            <h3 class="text-sm font-semibold text-zinc-200 flex items-center gap-1.5 mb-2">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                                Sizable Pre-Seed Backing
+                            </h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                Backed by <strong>Menlo Ventures</strong> (known for Anthropic) and <strong>Bitkraft Ventures</strong>, raising a strong $8M seed round. They have the premium credibility to attract highly specialized generative video scientists away from legacy tech companies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: RISKS & BAD -->
+                <div id="content-bad" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-red-400 flex items-center gap-2">
+                            <span>⚠️</span> The Bad / Risks Part: Hidden Landmines
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 2 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">01</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">The "Lensa AI" Retention Trap (病毒式玩具陷阱)</h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+                                    Generative AI applications frequently suffer from high initial virality but <strong>abysmal long-term retention</strong>. If the Pose Control is just a "one-week gimmick" for creators, their churn rate (退订率) will skyrocket, flattening their growth curve and rendering a high valuation unsustainable.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">02</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">Commoditization by Platforms (大平台降维打击)</h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+                                    If TikTok's CapCut or Adobe Premiere integrates character consistency and pose-control pipelines natively into their existing editors, the need for a standalone app like Diffuse shrinks to zero. Higgsfield lacks the ecosystem lock-in of native production suites.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-zinc-900/30 rounded-lg border border-red-900/20">
+                            <span class="text-red-400 font-bold">03</span>
+                            <div>
+                                <h3 class="text-sm font-semibold text-zinc-200">The GPU Cash Furnace (算力无底洞)</h3>
+                                <p class="text-xs text-zinc-400 mt-1 leading-relaxed">
+                                    Video generation models are the most computationally expensive models in existence. The $8M Seed funding can be burned through in months just on NVIDIA H100 cloud leases and infrastructure cooling, forcing them into a cycle of constant, dilutive capital raises.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: BUSINESS MODEL -->
+                <div id="content-business" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-sky-400 flex items-center gap-2">
+                            <span>💰</span> Business Model: Revenue Mechanics
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 3 OF 5</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-sky-400 font-mono tracking-wider mb-1 uppercase">Tier 1: Creator SaaS</div>
+                                <h3 class="text-sm font-bold text-white mb-2">Pro Subscription</h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                                    Targeting solo influencers and freelance marketers. Offers priority cloud rendering, higher resolutions, and unlimited custom character locks.
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$29-$49<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-purple-400 font-mono tracking-wider mb-1 uppercase">Tier 2: Business API</div>
+                                <h3 class="text-sm font-bold text-white mb-2">Inference / API Volume</h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                                    Charging social media agencies, web3 projects, and automated marketing tools per generated video frame via highly optimized API endpoints.
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$0.05 - $0.15<span class="text-xs text-zinc-500">/video</span></div>
+                        </div>
+                        <div class="p-4 bg-zinc-900/50 rounded-xl border border-zinc-800 flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs font-bold text-emerald-400 font-mono tracking-wider mb-1 uppercase">Tier 3: Enterprise GTM</div>
+                                <h3 class="text-sm font-bold text-white mb-2">Brand Fine-Tuning</h3>
+                                <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+                                    Custom enterprise plans for game publishers (e.g., Bitkraft's network) to train tailored characters and IP assets for localized ad campaigns.
+                                </p>
+                            </div>
+                            <div class="text-lg font-bold text-white font-mono mt-2">$5K - $20K<span class="text-xs text-zinc-500">/mo</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: CORE TECH -->
+                <div id="content-tech" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-yellow-500 flex items-center gap-2">
+                            <span>🧬</span> Core Technology & Competitor Analysis
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 4 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-zinc-900/20 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-zinc-200 mb-2">Can they maintain a technological lead? (技术持续领先能力)</h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                The underlying research in generative video (DiT - Diffusion Transformers) is rapidly commoditizing. While Higgsfield's 3D pose alignment and tracking architecture are proprietary, open-source models (like Stable Video Diffusion, Hunyuan, or CogVideo) are closing the gap in weeks rather than years.
+                            </p>
+                        </div>
+                        <table class="w-full text-xs text-left text-zinc-300">
+                            <thead class="bg-zinc-900 text-zinc-500 font-mono">
+                                <tr>
+                                    <th class="p-3">Player</th>
+                                    <th class="p-3">Core Edge</th>
+                                    <th class="p-3">Core Disadvantage</th>
+                                    <th class="p-3">Focus Market</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800">
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Sora / Luma</td>
+                                    <td class="p-3 text-emerald-400">Extreme Fidelity</td>
+                                    <td class="p-3 text-red-400">Abysmal Control, High Cost</td>
+                                    <td class="p-3">Cinematic / Cinematic B-Roll</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Runway / Pika</td>
+                                    <td class="p-3 text-emerald-400">Enterprise Suites</td>
+                                    <td class="p-3 text-red-400">Poor Mobile Loop</td>
+                                    <td class="p-3">Ad Agencies & VFX Teams</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-white">Higgsfield</td>
+                                    <td class="p-3 text-emerald-400">Pose & Face Consistency</td>
+                                    <td class="p-3 text-red-400">Raw Model Capacity</td>
+                                    <td class="p-3 text-amber-400">Social Creators & Mobile Ads</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: GTM & PARTNERS -->
+                <div id="content-trends" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <h2 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
+                            <span>🚀</span> GTM Strategy & Partnership Integrity
+                        </h2>
+                        <span class="text-xs font-mono text-zinc-500">SECTION 5 OF 5</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-zinc-200 mb-1">MCNs & User Acquisition (UA) Partnerships</h3>
+                            <p class="text-xs text-zinc-400 leading-relaxed">
+                                Their primary strategic partnership vectors are <strong>digital marketing agencies</strong> and <strong>mobile gaming studios</strong> (primarily introduced via their investor Bitkraft). These studios use Higgsfield to instantly generate thousands of localized ad variations for game characters.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-zinc-900/30 rounded-xl border border-zinc-800">
+                            <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2 mb-2">
+                                <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+                                The DD Checklist: Checking the Contract Reality
+                            </h3>
+                            <ul class="text-xs text-zinc-400 space-y-2 list-disc pl-5">
+                                <li><strong>Paid ARR vs. Non-Binding MOUs:</strong> Are their gaming partnerships generating recurring licensing revenue (SaaS SaaS ARR) or are they just free trial pilots?</li>
+                                <li><strong>User Acquisition Cost (CAC) Dependency:</strong> Are they spending their precious cash buying TikTok ads to acquire users, or is growth purely organic?</li>
+                                <li><strong>Copyright / Licensing Safeguards:</strong> Do they have proper protection against training datasets (Fair Use vs. Potential Copyright Lawsuits)?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Highlight Box: Core Thesis Summary -->
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-5">
+                <h3 class="text-xs font-bold text-emerald-400 font-mono uppercase tracking-wider mb-2">Core Investment Logic</h3>
+                <p class="text-sm text-zinc-300 leading-relaxed">
+                    "Higgsfield is a highly focused GTM bet. While we must pass on BSH / ZaiNar due to severe product/market disconnects, Higgsfield holds a solid chance of capturing the social media generation loop. However, our investment must be contingent on verifying that their <strong>inference economics do not scale into a massive loss-making structure</strong> and that their partnerships represent <strong>contractual ARR</strong> rather than unverified pilots."
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Interactive Compute Burn & Inference Economics Simulator -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            <div class="bg-zinc-950 rounded-xl border border-zinc-800 p-6 space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span>⚡</span> Compute & Unit Economics Simulator
+                    </h2>
+                    <p class="text-xs text-zinc-400 mt-1">Simulate Monthly Infrastructure Burn Rate (H100 GPU Instances)</p>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="space-y-4">
+                    <!-- Control 1: Active Users -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">Monthly Active Creators</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-users">5,000</span>
+                        </div>
+                        <input type="range" id="input-users" min="1000" max="50000" step="1000" value="5000" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 2: Daily Videos per User -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">Daily Video Generations / Creator</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-videos">3</span>
+                        </div>
+                        <input type="range" id="input-videos" min="1" max="15" step="1" value="3" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 3: H100 Hourly Cost -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">NVIDIA H100 Lease Cost (Hourly)</span>
+                            <span class="font-mono text-emerald-400 font-semibold">$<span id="val-h100">2.20</span></span>
+                        </div>
+                        <input type="range" id="input-h100" min="1.50" max="4.00" step="0.10" value="2.20" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 4: Inference Steps (Complexity) -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">Inference Render Time per Video (Seconds)</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-render">15s</span>
+                        </div>
+                        <input type="range" id="input-render" min="5" max="45" step="5" value="15" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+
+                    <!-- Control 5: Monthly Subscription Price -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-zinc-400">Assumed Monthly Subscription Fee</span>
+                            <span class="font-mono text-emerald-400 font-semibold" id="val-sub">$29</span>
+                        </div>
+                        <input type="range" id="input-sub" min="9" max="99" step="5" value="29" oninput="calculateCompute()" class="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="h-px bg-zinc-800"></div>
+
+                <!-- Live Output Displays -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">Videos Gen / Month</div>
+                        <div class="text-lg font-mono font-bold text-white mt-1" id="out-total-videos">450,000</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">Required H100 GPUs</div>
+                        <div class="text-lg font-mono font-bold text-white mt-1" id="out-gpus">4</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">Compute Cost / Video</div>
+                        <div class="text-lg font-mono font-bold text-red-400 mt-1" id="out-cost-per-video">$0.009</div>
+                    </div>
+                    <div class="p-3 bg-zinc-900/40 rounded-lg border border-zinc-800 text-center">
+                        <div class="text-[10px] font-bold text-zinc-500 uppercase font-mono tracking-wider">Gross Profit Margin</div>
+                        <div class="text-lg font-mono font-bold text-emerald-400 mt-1" id="out-margin">97%</div>
+                    </div>
+                </div>
+
+                <!-- Macro Financial Impact Summary -->
+                <div class="p-4 rounded-xl border bg-zinc-900/30 text-xs flex flex-col gap-2" id="box-health-border">
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500">Estimated Monthly SaaS Revenue:</span>
+                        <span class="text-white font-semibold" id="out-rev">$145,000</span>
+                    </div>
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500">Estimated Monthly GPU Server Rent:</span>
+                        <span class="text-red-400 font-semibold" id="out-gpu-cost">-$4,125</span>
+                    </div>
+                    <div class="flex justify-between font-mono">
+                        <span class="text-zinc-500">Monthly Power Draw (Electricity):</span>
+                        <span class="text-amber-400 font-semibold" id="out-electricity">2.01 MWh</span>
+                    </div>
+                    <div class="h-px bg-zinc-800 my-1"></div>
+                    <div class="flex justify-between text-sm font-bold font-mono">
+                        <span class="text-zinc-400">Compute Net Runrate:</span>
+                        <span class="text-emerald-400" id="out-net">+$140,875/mo</span>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="text-[10px] text-zinc-500 italic leading-relaxed text-center">
+                    Note: Power calculations assume standard server TDP metrics (700W peak draw per H100 SXM5 server node). Real-world metrics can scale higher during training phases.
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Area -->
+    <footer class="border-t border-zinc-800 bg-zinc-950 py-4 px-6 text-center text-xs text-zinc-500 flex flex-wrap justify-between items-center gap-4">
+        <span>© 2026 Summit House Ventures • Confidential Due Diligence Platform</span>
+        <span class="font-mono text-[10px] bg-zinc-900 py-1 px-2 rounded border border-zinc-800">COMPILED BY AI INVESTMENT ENGINE V3</span>
+    </footer>
+
+    <!-- Tab Switching and Compute Calculation Logic -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabs = ['good', 'bad', 'business', 'tech', 'trends'];
+            tabs.forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).className = "flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 text-zinc-400 hover:text-white";
+            });
+
+            // Show active tab content
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            
+            // Highlight active button
+            let activeColor = "border-zinc-700 bg-zinc-800 text-white shadow-sm";
+            if (tabId === 'bad') activeColor = "border-red-900/40 bg-red-950/20 text-red-400 shadow-sm";
+            if (tabId === 'business') activeColor = "border-sky-900/40 bg-sky-950/20 text-sky-400 shadow-sm";
+            if (tabId === 'tech') activeColor = "border-yellow-900/40 bg-yellow-950/20 text-yellow-400 shadow-sm";
+            if (tabId === 'trends') activeColor = "border-indigo-900/40 bg-indigo-950/20 text-indigo-400 shadow-sm";
+
+            document.getElementById(`tab-${tabId}`).className = `flex-1 min-w-[120px] text-xs py-2 px-3 rounded-lg font-medium transition-all duration-200 ${activeColor} border`;
+        }
+
+        function calculateCompute() {
+            // Grab inputs
+            const users = parseInt(document.getElementById('input-users').value);
+            const videos = parseInt(document.getElementById('input-videos').value);
+            const h100Rate = parseFloat(document.getElementById('input-h100').value);
+            const renderTime = parseInt(document.getElementById('input-render').value);
+            const subPrice = parseInt(document.getElementById('input-sub').value);
+
+            // Update UI slider values
+            document.getElementById('val-users').innerText = users.toLocaleString();
+            document.getElementById('val-videos').innerText = videos;
+            document.getElementById('val-h100').innerText = h100Rate.toFixed(2);
+            document.getElementById('val-render').innerText = renderTime + 's';
+            document.getElementById('val-sub').innerText = '$' + subPrice;
+
+            // Compute values
+            const totalVideosMonth = users * videos * 30; // 30 days
+            const totalRenderSeconds = totalVideosMonth * renderTime;
+            const totalHours = totalRenderSeconds / 3600;
+
+            // How many H100 hours we need. (Assuming perfect concurrency mapping)
+            const gpusNeeded = Math.max(1, Math.ceil(totalHours / (24 * 30)));
+            const monthlyGpuCost = gpusNeeded * 24 * 30 * h100Rate;
+            
+            // Unit cost per video
+            const costPerVideo = monthlyGpuCost / totalVideosMonth;
+            
+            // Power draw: H100 server node runs at approx 700 Watts (0.7 kW)
+            const electricityMWh = (gpusNeeded * 24 * 30 * 0.7) / 1000;
+
+            // Finance
+            const estimatedRevenue = users * subPrice;
+            const grossProfitMargin = ((estimatedRevenue - monthlyGpuCost) / estimatedRevenue) * 100;
+            const netRunrate = estimatedRevenue - monthlyGpuCost;
+
+            // Update output fields
+            document.getElementById('out-total-videos').innerText = totalVideosMonth.toLocaleString();
+            document.getElementById('out-gpus').innerText = gpusNeeded;
+            document.getElementById('out-cost-per-video').innerText = '$' + costPerVideo.toFixed(3);
+            document.getElementById('out-margin').innerText = Math.round(grossProfitMargin) + '%';
+            document.getElementById('out-rev').innerText = '$' + estimatedRevenue.toLocaleString();
+            document.getElementById('out-gpu-cost').innerText = '-$' + monthlyGpuCost.toLocaleString();
+            document.getElementById('out-electricity').innerText = electricityMWh.toFixed(2) + ' MWh';
+
+            // Handle Profit vs Loss visual coloring
+            const netEl = document.getElementById('out-net');
+            const healthBorder = document.getElementById('box-health-border');
+            if (netRunrate >= 0) {
+                netEl.innerText = '+$' + netRunrate.toLocaleString() + '/mo';
+                netEl.className = "text-emerald-400 font-mono";
+                healthBorder.className = "p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/10 text-xs flex flex-col gap-2";
+            } else {
+                netEl.innerText = '-$' + Math.abs(netRunrate).toLocaleString() + '/mo';
+                netEl.className = "text-red-400 font-mono";
+                healthBorder.className = "p-4 rounded-xl border border-red-500/20 bg-red-950/10 text-xs flex flex-col gap-2";
+            }
+        }
+
+        // Initialize calculations on script load
+        calculateCompute();
+    </script>
+</body>
+</html>
